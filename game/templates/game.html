@@ -4,11 +4,36 @@
   <title>Matrix Sum Game</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
-    table { border-collapse: collapse; margin: 10px 0; }
+    table { border-collapse: collapse; margin: 10px 0; background-color: antiquewhite;}
     td { border: 1px solid black; padding: 10px; text-align: center; width: 40px; height: 40px; cursor: pointer; }
-    td.selected { background-color: #90ee90; } /* highlight selected cells */
-    #matrix { margin-bottom: 20px; }
+    td:hover { background-color: #f0f8ff; }  /* light blue hover */
+    td.selected { background: linear-gradient(to bottom , #90ee90, #32cd32);
+    color: white;
+    font-weight: bold; } /* highlight selected cells */
+      #result {
+        font-size: 18px;
+        font-weight: bold;
+      }
+    #matrix { margin-bottom: 20px; 
+    padding: 10px;
+    display: inline-block;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background-color: #fafafa;  /* light background for matrix container */
+  }
     input, button { padding: 5px 10px; margin: 5px; }
+    button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: 0.3s;
+      }
+      button:hover {
+        background-color: #0056b3;
+        cursor: pointer;
+      }
+    pre { background-color: #f4f4f4; padding: 10px; border: 1px solid #ddd; }     
   </style>
 </head>
 <body>
@@ -24,6 +49,7 @@
   <pre id="paths"></pre>
   <h3>Your selection result:</h3>
   <p id="result"></p>
+
 
   <script>
     const csrftoken = getCookie('csrftoken');
@@ -118,9 +144,13 @@
       const sum = selectedCells.reduce((acc, c) => acc + c.value, 0);
 
       if (sum === target) {
-        document.getElementById("result").textContent = `✅ Correct! Your path sums to ${target}.`;
+        const res = document.getElementById("result");
+        res.textContent = `✅ Correct! Your path sums to ${target}.`;
+        res.style.color = "green";
       } else {
-        document.getElementById("result").textContent = `❌ Wrong! Your path sums to ${sum}, not ${target}.`;
+        const res = document.getElementById("result");
+        res.textContent = `❌ Wrong! Your path sums to ${sum}, not ${target}.`;
+        res.style.color = "red";
       }
     }
   </script>
