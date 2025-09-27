@@ -4,10 +4,11 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-def home(request):
+def game(request):
     return render(request, "game.html")  # frontend template
 
 def generate_matrix(request):
+    print("Generating matrix...-------")
     rows, cols = 4, 4
     matrix = [[random.randint(1, 9) for _ in range(cols)] for _ in range(rows)]
     return JsonResponse({"matrix": matrix})

@@ -15,4 +15,15 @@ python manage.py migrate
 python manage.py makemigration
 
 python manage.py runserver
-# Games
+# Game - 2
+python manage.py startapp tic_tac_toe
+<!-- Board Storage: Stored in request.session as a 3x3 list.
+
+Move Handling: Updates the board when a user clicks a cell.
+
+Player Switch: Alternates between "X" and "O".
+
+Winner Check: Checks rows, columns, and diagonals after each move.
+
+Reset: Can reset the game via ?reset=1 in the URL. -->
+

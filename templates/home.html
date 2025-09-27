@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Hub</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 50px; }
+        a { display: block; margin: 20px; padding: 10px 20px; font-size: 24px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; }
+        a:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Game Hub!</h1>
+    <a href="{% url 'game_view' %}">Game App</a>
+    <a href="{% url 'tic_tac_toe_view' %}">Tic-Tac-Toe</a>
+</body>
+</html>
