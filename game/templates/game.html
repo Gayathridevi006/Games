@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Matrix Sum Game</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table { border-collapse: collapse; margin: 10px 0; }
+    td { border: 1px solid black; padding: 10px; text-align: center; width: 40px; height: 40px; cursor: pointer; }
+    td.selected { background-color: #90ee90; } /* highlight selected cells */
+    #matrix { margin-bottom: 20px; }
+    input, button { padding: 5px 10px; margin: 5px; }
+  </style>
+</head>
+<body>
+  <h1>🎲 Matrix Sum Game</h1>
+
+  <button onclick="generateMatrix()">Generate Matrix</button>
+  <input type="number" id="target" placeholder="Enter target sum">
+  <button onclick="findPaths()">Find Paths</button>
+  <button onclick="checkSelection()">Check Your Path</button>
+
+  <div id="matrix"></div>
+  <h3>Paths from backend:</h3>
+  <pre id="paths"></pre>
+  <h3>Your selection result:</h3>
+  <p id="result"></p>
+
+  <script>
+    const csrftoken = getCookie('csrftoken');
+    let currentMatrix = [];
+    let selectedCells = [];
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+          cookie = cookie.trim();
+          if (cookie.startsWith(name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    async function generateMatrix() {
+      const response = await fetch("/generate-matrix/");
+      const data = await response.json();
+      currentMatrix = data.matrix;
+      selectedCells = [];
+
+      let html = "<table>";
+      for (let i = 0; i < currentMatrix.length; i++) {
+        html += "<tr>";
+        for (let j = 0; j < currentMatrix[i].length; j++) {
+          html += `<td data-row="${i}" data-col="${j}" onclick="selectCell(this)">${currentMatrix[i][j]}</td>`;
+        }
+        html += "</tr>";
+      }
+      html += "</table>";
+      document.getElementById("matrix").innerHTML = html;
+      document.getElementById("paths").textContent = "";
+      document.getElementById("result").textContent = "";
+    }
+
+    function selectCell(cell) {
+      const row = parseInt(cell.getAttribute("data-row"));
+      const col = parseInt(cell.getAttribute("data-col"));
+      const value = currentMatrix[row][col];
+
+      const index = selectedCells.findIndex(c => c.row === row && c.col === col);
+      if (index >= 0) {
+        // deselect if clicked again
+        selectedCells.splice(index, 1);
+        cell.classList.remove("selected");
+      } else {
+        // select new cell
+        selectedCells.push({row, col, value});
+        cell.classList.add("selected");
+      }
+    }
+
+    async function findPaths() {
+      const target = parseInt(document.getElementById("target").value);
+      if (!target || currentMatrix.length === 0) {
+        alert("Please generate a matrix and enter a target sum.");
+        return;
+      }
+
+      const response = await fetch("/find-paths/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({ matrix: currentMatrix, target: target })
+      });
+
+      if (!response.ok) {
+        alert("Error fetching paths");
+        return;
+      }
+
+      const data = await response.json();
+      document.getElementById("paths").textContent = JSON.stringify(data.paths, null, 2);
+      document.getElementById("result").textContent = "";
+    }
+
+    function checkSelection() {
+      const target = parseInt(document.getElementById("target").value);
+      if (selectedCells.length === 0) {
+        alert("Please select some cells first!");
+        return;
+      }
+
+      const sum = selectedCells.reduce((acc, c) => acc + c.value, 0);
+
+      if (sum === target) {
+        document.getElementById("result").textContent = `✅ Correct! Your path sums to ${target}.`;
+      } else {
+        document.getElementById("result").textContent = `❌ Wrong! Your path sums to ${sum}, not ${target}.`;
+      }
+    }
+  </script>
+</body>
+</html>
