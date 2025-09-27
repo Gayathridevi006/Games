@@ -130,7 +130,19 @@
       }
 
       const data = await response.json();
-      document.getElementById("paths").textContent = JSON.stringify(data.paths, null, 2);
+      const pathsDiv = document.getElementById("paths");
+      pathsDiv.innerHTML = ""; // clear previous
+
+      data.paths.forEach((path, idx) => {
+        const pathEl = document.createElement("div");
+        pathEl.style.marginBottom = "5px";
+        pathEl.style.padding = "5px";
+        pathEl.style.backgroundColor = "#f0f8ff"; // light blue
+        pathEl.style.borderRadius = "5px";
+        pathEl.textContent = `Path ${idx + 1}: ${path.join(" → ")}`;
+        pathsDiv.appendChild(pathEl);
+      });
+
       document.getElementById("result").textContent = "";
     }
 
