@@ -28,7 +28,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home_view, name="home"),  # Homepage
     path("game/", include("game.urls")),            # Other game app
-     path("generate-matrix/", game_views.generate_matrix, name="generate_matrix"),
+    path("generate-matrix/", game_views.generate_matrix, name="generate_matrix"),
     path("find-paths/", game_views.find_paths, name="find_paths"),
     path("tic_tac_toe/", include("tic_tac_toe.urls")),  # Tic-Tac-Toe app
+    path('math-game/', include('math_game.urls')),
 ]

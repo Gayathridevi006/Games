@@ -27,3 +27,5 @@ Winner Check: Checks rows, columns, and diagonals after each move.
 
 Reset: Can reset the game via ?reset=1 in the URL. -->
 
+# Game 3
+python manage.py startapp math_game

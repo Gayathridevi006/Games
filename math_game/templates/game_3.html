@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Math Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #fceabb, #f8b500);
+            text-align: center;
+            padding: 40px;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form {
+            background: #fff8e7;
+            padding: 20px;
+            display: inline-block;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        input[type="number"] {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin: 10px;
+            width: 80px;
+            text-align: center;
+            font-size: 16px;
+        }
+        button {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #e68900;
+        }
+        .result {
+            margin-top: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: green;
+        }
+        .wrong {
+            color: red;
+        }
+        .hint {
+            margin-top: 15px;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h2>Math Game: Solve the Problem</h2>
+
+    {% if result %}
+        <p class="result {% if 'Wrong' in result %}wrong{% endif %}">
+            {{ result }}
+        </p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <p>Solve: <strong>{{ problem.a }} {{ problem.op }} {{ problem.b }}</strong> = ?</p>
+        <input type="number" name="answer" required>
+        <input type="hidden" name="correct_answer" value="{{ problem.answer }}">
+        <button type="submit">Check Answer</button>
+    </form>
+
+    <p class="hint">💡 Hint (Mid value): {{ mid_value }}</p>
+</body>
+</html>
